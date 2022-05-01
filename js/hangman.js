@@ -4,7 +4,7 @@
  * CIS 5620: Authoring Websites                                      *
  *********************************************************************/
 
-/* 
+/*
   Avoid creating global variables by implementing all the application
   inside an Immediately Invoked Function Expression (IIFE).
 */
@@ -40,7 +40,7 @@
   const SPACE = '&nbsp;&nbsp;&nbsp;';
 
   // Word to guess
-  const WORD = "computer"; 
+  const WORD = "computer";
 
   // State of the game
   const GAME = {
@@ -56,9 +56,9 @@
 
   /**
   Draws the hangman figure.
-  
-  @param	{string} part A string representing the part of the hangman to draw
-  
+ 
+  @param {string} part A string representing the part of the hangman to draw
+ 
   @returns No value.
   */
   function drawHangman(part) {
@@ -122,12 +122,12 @@
 
   /**
   Generates the HTML for displaying a single letter in the game interface.
-  
-  @param	{string} symbol A string representing the letter to display.
+ 
+  @param {string} symbol A string representing the letter to display.
                           The symbol can be an empty string to display a blank
-                          space, which would symbolize a letter that has not been 
+                          space, which would symbolize a letter that has not been
                           guessed by the player.
-  
+ 
   @returns No value.
   */
   function getLetterHTML(symbol) {
@@ -139,11 +139,11 @@
    ******************************************/  
 
   /**
-  Event handler for clicking a letter on the letters board. 
+  Event handler for clicking a letter on the letters board.
 
-  @param	{object} event An object representing the event. In this case, the event
+  @param {object} event An object representing the event. In this case, the event
                          should correspond to a click on a letter button on the board.
-  
+ 
   @returns No value.
   */
   function chooseLetter(event) {
@@ -155,38 +155,57 @@
 
     /* YOU MAY CHANGE THE CODE IN THIS FUNCTION */
 
-    // Draw the corresponding hangman part and
-    // increment the GAME.step variable by one
-    drawHangman(HANGMAN_STEPS[GAME.step++]);
-
-    // Check if the hangman is completed to display the end-game message
-    if (undefined === HANGMAN_STEPS[GAME.step]) {
-      document.querySelector("#game-over-msg").classList.remove("hide");
-    }
-
+   
     /* As the GAME.step++ variable is always incremented by one, a way to check
       if the hangman has been completed is by comparing the value of the HANGMAN_STEPS
       at the index indicated by the GAME.step variable against undefined.
       If the value of HANGMAN_STEPS at GAME.step is undefined, it means there are no
       more parts to draw, and thus, the game should be over. */
+ 
+ letter = this.innerHTML;
+ if (WORD.indexOf(letter.toLowerCase()) == -1) {
+// Draw the corresponding hangman part and
+// increment the GAME.step variable by one
+drawHangman(HANGMAN_STEPS[GAME.step++]);
+// Check if the hangman is completed to display the end-game message
+if (undefined === HANGMAN_STEPS[GAME.step]) {
+ document.querySelector("#game-over-msg").classList.remove("hide");
+}
+}
+for (i = 0; i < WORD.length; i++) {
+if (theWordSplit[i] === letter.toLowerCase()) {
+count++;
+hiddenWordSplit[i] = letter;
+}
+word.innerHTML = hiddenWordSplit.join("</span>&#160;");
+}
+
+if (count === WORD.length) {
+document.querySelector("#win-msg").classList.remove("hide");
+}
   }
 
   // GAME START-OFF
 
-  // Draw the gallows 
+  // Draw the gallows
   drawHangman('gallows');
 
   let wordHTML = "";
+  hiddenWordSplit = [],
+  theWordSplit = [];
+  count = 0,
+  theWordSplit = WORD.split("");
   for (let i = 0; i < WORD.length; i++) {
     // Display an empty space for each letter of the word to guess
     wordHTML += getLetterHTML(SPACE);
   }
+  hiddenWordSplit = wordHTML.split("</span>");
   document.querySelector('#word').innerHTML = wordHTML;
-
+ 
   // Add the chooseLetter function as an event handler for each
   // letter on the board
   for (let letterBtn of document.querySelectorAll(".letter")) {
     letterBtn.addEventListener('click', chooseLetter)
   }
-
+ 
 })();
