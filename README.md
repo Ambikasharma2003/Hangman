@@ -1,2 +1,2 @@
 # Hangman
-Practical Assessment
+A JavaScript implementation
